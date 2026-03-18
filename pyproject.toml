@@ -1,0 +1,24 @@
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-agent"
+version = "0.1.0"
+description = "AI Agent with LangGraph"
+dependencies = [
+    "langchain",
+    "langchain-core",
+    "langchain-community",
+    "langgraph",
+    "langgraph-checkpoint-sqlite",
+    "dashscope",
+    "python-dotenv",
+    "fastapi",
+    "uvicorn"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]

@@ -14,6 +14,15 @@ def doc_processor_node(state: AgentState):
     messages = state['messages']
     last_message = messages[-1]
     
+    # Handle both object and dict (serialization) formats
+    if isinstance(last_message, dict):
+        content = last_message.get("content", "")
+    else:
+        content = last_message.content
+        
+    if not isinstance(content, str):
+        content = str(content)
+    
     # We can use the configured LLM for doc analysis if needed, even in mock
     llm = ModelFactory.create(agent_llm_configs.doc_processor)
     
@@ -21,7 +30,7 @@ def doc_processor_node(state: AgentState):
     # Assume the user message contains a file path or content description
     # For demo, we just reply with a mock extraction result
     
-    print(f"\n[DocProcessor] Processing document request: {last_message.content[:50]}...")
+    print(f"\n[DocProcessor] Processing document request: {content[:50]}...")
     
     # Simulate extraction
     extracted_info = {

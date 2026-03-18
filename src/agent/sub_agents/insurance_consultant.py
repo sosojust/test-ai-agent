@@ -32,8 +32,23 @@ def chatbot_node(state: AgentState):
     
     # Simple Retrieval Strategy:
     # Use the content of the last user message to retrieve relevant skills
+    query = ""
+    is_human = False
+    
     if isinstance(last_message, HumanMessage):
+        is_human = True
         query = last_message.content
+    elif isinstance(last_message, dict):
+        msg_type = last_message.get("type")
+        role = last_message.get("role")
+        if msg_type == "human" or role == "user":
+            is_human = True
+            query = last_message.get("content", "")
+            
+    if not isinstance(query, str):
+        query = str(query)
+        
+    if is_human:
         relevant_tools = SkillRegistry.retrieve_skills(query)
     else:
         # If last message is not human (e.g. tool output), keep the previous context or retrieve all?
@@ -47,6 +62,12 @@ def chatbot_node(state: AgentState):
             if isinstance(m, HumanMessage):
                 query = m.content
                 break
+            elif isinstance(m, dict):
+                msg_type = m.get("type")
+                role = m.get("role")
+                if msg_type == "human" or role == "user":
+                    query = m.get("content", "")
+                    break
         relevant_tools = SkillRegistry.retrieve_skills(query)
     
     if not relevant_tools:
@@ -71,7 +92,13 @@ def should_continue(state: AgentState):
     messages = state['messages']
     last_message = messages[-1]
     
-    if last_message.tool_calls:
+    tool_calls = []
+    if hasattr(last_message, "tool_calls"):
+        tool_calls = last_message.tool_calls
+    elif isinstance(last_message, dict):
+        tool_calls = last_message.get("tool_calls", [])
+        
+    if tool_calls:
         return "continue"
     return "end"
 

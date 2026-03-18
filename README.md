@@ -37,7 +37,11 @@
 │   ├── skills/         # 技能注册与实现 (Tools)
 │   ├── config/         # LLM 等配置
 │   └── utils/          # 模型工厂等工具类
-├── docs/               # 文档 (PRD, LangGraph 设计, DeepAgents 对比分析)
+├── docs/               # 文档目录
+│   ├── PRD.md                                # 产品需求文档
+│   ├── langgraph_vs_deepagents.md            # 框架对比分析
+│   ├── skills_implementation_discussion.md   # Skills 工程化实现深度探讨
+│   └── blog_building_ai_agent_from_scratch.md # 技术博客：从零实现 AI Agent 的架构演进与思考
 ├── main.py             # 命令行启动入口 (LangGraph 版本)
 ├── run_server.py       # API 服务启动入口
 ├── requirements.txt    # 依赖列表
@@ -88,6 +92,17 @@ python src/agent/deepagents_demo.py
 ```bash
 python run_server.py
 ```
+
+**方式四：运行 LangGraph Server (Built-in)**
+使用 LangGraph 官方命令行工具启动本地服务器 (需安装 Docker)。
+```bash
+# 1. 安装 LangGraph CLI
+pip install langgraph-cli
+
+# 2. 启动服务器 (Docker Compose)
+langgraph dev
+```
+启动后，访问 `http://localhost:2024` 查看 LangGraph Studio。
 
 ## 6. 交互示例
 

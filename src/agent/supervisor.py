@@ -47,7 +47,17 @@ def router_node(state: AgentState):
     """
     messages = state['messages']
     last_message = messages[-1]
-    content = last_message.content
+    
+    # Handle both object and dict (serialization) formats
+    if isinstance(last_message, dict):
+        content = last_message.get("content")
+    else:
+        content = last_message.content
+        
+    if content is None:
+        content = ""
+    elif not isinstance(content, str):
+        content = str(content)
     
     print(f"\n[Router] Analyzing intent for: {content[:50]}...")
     

@@ -50,3 +50,6 @@ def build_graph():
     workflow.add_edge("doc_processor", END)
     
     return workflow
+
+# Export Compiled Graph for LangGraph Server
+graph = build_graph().compile()
